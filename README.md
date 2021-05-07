@@ -1,4 +1,9 @@
-# Getting Started with Create React App
+# Getting started
+Compile contracts and deploy using `truffle migrate --reset`.
+
+To test everything is working fine, run `truffle test`.
+
+# Usual react stuff
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
