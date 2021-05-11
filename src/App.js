@@ -1,91 +1,56 @@
 import './App.css';
-import Web3 from 'web3';
-import Social from './abis/Social.json'
+
+
+import { social, initSocial } from './Social';
 import { useEffect, useState } from 'react';
 import UserRegistrationForm from './UserRegistrationForm';
 import Feed from './Feed';
 
+import { appState } from './recoil/atoms';
+import { useRecoilState } from 'recoil';
+
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
 
-const loadWeb3 = async () => {
-  if (window.ethereum) {
-    window.web3 = new Web3(window.ethereum)
-    await window.ethereum.enable()
-  }
-  else if (window.web3) {
-    window.web3 = new Web3(window.web3.currentProvider)
-  }
-  else {
-    window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
-  }
-};
 
-const loadBlockchainData = async (setAccount, setSocial, setModal, setLoading, setPhotos) => {
-  const web3 = window.web3
-  // Load account
-  const accounts = await web3.eth.getAccounts();
-  setAccount(accounts[0]);
-  // Network ID
-  const networkId = await web3.eth.net.getId()
-  const networkData = Social.networks[networkId]
-  if(networkData) {
-    const social = new web3.eth.Contract(Social.abi, networkData.address);
-    setSocial(social);
-    try {
-      const user = await social.methods.getCurrentUser().call();
-    } catch(e) {
-      setModal(true);
-      setLoading(false);
-      return;
-    }
+    //setApp({ accounts, selectedAccount, isLoadingUser: false, currentUser, socialContract: {...social } });
 
-    const photoCount = await social.methods.photoCount().call();
-    const promises = [];
-    for (let i = 0; i < photoCount; i++) {
-      promises.push(social.methods.photos(i).call());
-    }
-    Promise.all(promises)
-      .then(photos => {
-        setPhotos(photos);
-        photos.forEach(photo => console.log(photo));
-        setLoading(false);
-      });
-  } else {
-    window.alert('Social contract not deployed to detected network.');
-    setLoading(false);
-  }
-}
+    // const photoCount = await social.methods.photoCount().call();
+    // const promises = [];
+    // for (let i = 0; i < photoCount; i++) {
+    //   promises.push(social.methods.photos(i).call());
+    // }
+    // Promise.all(promises)
+    //   .then(photos => {
+    //     setPhotos(photos);
+    //     photos.forEach(photo => console.log(photo));
+    //     setLoading(false);
+    //   });
 
 function App() {
 
-  const [modal, setModal] = useState(false);
+  const [app, setApp] = useRecoilState(appState);
 
-  const [social, setSocial] = useState(undefined);
-  const [account, setAccount] = useState(undefined);
-  const [loading, setLoading] = useState(true);
-  const [photos, setPhotos] = useState(undefined);
- 
-  const [web3] = useState(undefined);
+  /** Bootstraping the app */
   useEffect(() => {
-    async function loadDep() {
-      await loadWeb3();
-      await loadBlockchainData(setAccount, setSocial, setModal, setLoading, setPhotos);
-    }
-    if (!web3) {
-      loadDep();
-    }
-  }, [web3]);
+    initSocial().then(async (accounts) => {
+      let currentUser;
+      try {
+        currentUser = await social.methods.getCurrentUser().call();
+      } catch(e) {
+        currentUser = null;
+      }
+      setApp({ accounts, selectedAccount: accounts[0], isInitializing: false, currentUser });
+    });
+  }, []);
+  
 
   return (
     <div className="App">
-      {
-        loading ? "Loading..." : (modal ? <UserRegistrationForm social={social} account={account}/> : <Feed ipfs={ipfs}
-                                                                                                            social={social} 
-                                                                                                            account={account} 
-                                                                                                            photos={photos}
-                                                                                                            setLoading={setLoading}/>)
-      }
+      { app.isInitializing ? 
+        "Loading..." : 
+          (app.currentUser ? 'logged in' : <UserRegistrationForm/>) }
+         
     </div>
   );
 }

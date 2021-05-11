@@ -1,16 +1,16 @@
 import { atom } from 'recoil';
 
-const userState = atom({
-    key: 'userState', // unique ID (with respect to other atoms/selectors)
-    default: undefined, // default value (aka initial value)
-});
+export const appState = atom({
+    key: 'appState',
+    default: {
+        isInitializing: true,
+        accounts: [],
+        selectedAccount: null,
+        currentUser: null
+    }
+})
 
-const socialState = atom({
+export const socialState = atom({
     key: 'socialState',
     default: undefined,
 });
-
-export {
-    userState,
-    socialState,
-};
