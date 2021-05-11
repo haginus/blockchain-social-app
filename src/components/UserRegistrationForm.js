@@ -20,7 +20,7 @@ function UserRegistrationForm() {
         social.methods.addUser(name, username, bio).send({ from: app.selectedAccount })
         .on('receipt', (receipt) => {
             const id = parseInt(receipt.events['UserCreated'].returnValues['id']);
-            setApp({ ...app, currentUser: { id, name, username, bio } });
+            setApp({ ...app, currentUser: { id, fullName: name, username, bio } });
         })
         .on('error', (err) => {
             setLoading(false);
@@ -43,7 +43,7 @@ function UserRegistrationForm() {
             <h1 className="center">Welcome to Social App!</h1>
             <Form noValidate validated={validated} onSubmit={handleSubmit} className="form-box">
                 <h2>Sign up</h2>
-                <Form.Group controlId="name">
+                <Form.Group controlId="fullName">
                     <Form.Label>Full name</Form.Label>
                     <Form.Control type="text" placeholder="John Doe" required onChange={ e => setName(e.target.value) } />
                     <Form.Control.Feedback type="invalid">
