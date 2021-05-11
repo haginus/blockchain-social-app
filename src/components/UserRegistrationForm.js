@@ -1,8 +1,8 @@
-import { appState } from './recoil/atoms';
+import { appState } from '../recoil/atoms';
 import { useRecoilState } from 'recoil';
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { social } from './Social';
+import { social } from '../Social';
 
 import './UserRegistrationForm.css';
 

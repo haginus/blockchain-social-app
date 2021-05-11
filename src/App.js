@@ -2,10 +2,9 @@ import './App.css';
 
 
 import { social, initSocial } from './Social';
-import { useEffect, useState } from 'react';
-import UserRegistrationForm from './UserRegistrationForm';
-import Feed from './Feed';
-
+import { useEffect } from 'react';
+import Feed from './components/Feed';
+import UserRegistrationForm from './components/UserRegistrationForm';
 import { appState } from './recoil/atoms';
 import { useRecoilState } from 'recoil';
 
