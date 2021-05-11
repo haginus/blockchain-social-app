@@ -10,12 +10,12 @@ export const appState = atom({
     }
 })
 
-export const socialState = atom({
-    key: 'socialState',
-    default: undefined,
-});
-
 export const usersCache = atom({
     key: 'usersCache',
     default: {}
-})
+});
+
+export const photosState = atom({
+    key: 'photos',
+    default: {}
+});
