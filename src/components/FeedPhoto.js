@@ -9,6 +9,7 @@ import './FeedPhoto.css';
 
 import Identicon from 'react-identicons';
 import { parseObject } from "../util";
+import HoverProfile from "./HoverProfile";
 
 function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }) {
 
@@ -22,6 +23,8 @@ function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }
     const [likeCountS, setLikeCount] = useState(likeCount);
 
     const [app, setApp] = useRecoilState(appState);
+
+    const [hoverOn, setHoverOn] = useState(false);
 
     useEffect(() => {
         async function getUser() {
@@ -73,13 +76,32 @@ function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }
         });
     };
 
+    const handleHover = (event, enter) => {
+        if(enter) {
+            setHoverOn(
+                <div style={{left: event.clientX, top: event.clientY, position: 'absolute'}}>
+                    <HoverProfile 
+                        username={ author.username } _address={ author._address } bio={ author.bio }
+                        postCount={ author.postCount } fullName={ author.fullName }
+                        followerCount={ author.followerCount } followingCount={ author.followingCount }
+                    />
+                </div>
+            )
+        } else {
+            setHoverOn('');
+        }
+    }
+
     return (
         <div className="feed-photo">
             <div className="photo-header">
                 <div className="profile-picture">
                     <Identicon string={authorAddress} size={36}/>
                 </div>
-                <div className="username">
+                <div className="username"
+                    onMouseEnter={(event) => handleHover(event, true)}
+                    onMouseLeave={(event) => handleHover(event, false)}
+                >
                     { author.username }
                 </div>
                 { canFollow ? 
@@ -104,6 +126,7 @@ function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }
                     </div>
                 </div>
             </div>
+            { hoverOn }
         </div>
     )
 }

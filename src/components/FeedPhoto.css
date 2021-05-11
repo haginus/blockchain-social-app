@@ -28,9 +28,10 @@ img {
     overflow: hidden;
 }
 
-.username {
+.feed-photo .username {
     margin-left: 8px;
     font-weight: 500;
+    padding: 6px 0;
 }
 
 .follow-button {
