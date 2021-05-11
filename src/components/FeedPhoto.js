@@ -44,7 +44,7 @@ function FeedPhoto({ id, hash, description, likeCount, authorId }) {
                 <div className="follow-button">Follow</div>
             </div>
             <div className="image-container">
-                <img src="/test.jpeg"/>
+                <img src={`https://ipfs.infura.io/ipfs/${hash}`}/>
             </div>
             <div className="photo-footer">
                 <div className="photo-actions">
