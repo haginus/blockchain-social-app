@@ -7,6 +7,7 @@ const registerUser = (social, account, name, username, bio, setUser) => {
     
     social.methods.addUser(name, username, bio).send({ from: account }).on('transactionHash', (hash) => {
         console.log(hash);
+        window.location.reload();
     })
 }
 

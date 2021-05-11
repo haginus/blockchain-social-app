@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Web3 from 'web3';
 import Social from './abis/Social.json'
@@ -22,7 +21,7 @@ const loadWeb3 = async () => {
   }
 };
 
-const loadBlockchainData = async (setAccount, setSocial, setPhotoCount, setModal, setLoading, setPhotos) => {
+const loadBlockchainData = async (setAccount, setSocial, setModal, setLoading, setPhotos) => {
   const web3 = window.web3
   // Load account
   const accounts = await web3.eth.getAccounts();
@@ -42,7 +41,6 @@ const loadBlockchainData = async (setAccount, setSocial, setPhotoCount, setModal
     }
 
     const photoCount = await social.methods.photoCount().call();
-    console.log(photoCount);
     const promises = [];
     for (let i = 0; i < photoCount; i++) {
       promises.push(social.methods.photos(i).call());
@@ -64,7 +62,6 @@ function App() {
   const [modal, setModal] = useState(false);
 
   const [social, setSocial] = useState(undefined);
-  const [photoCount, setPhotoCount] = useState(undefined);
   const [account, setAccount] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [photos, setPhotos] = useState(undefined);
@@ -73,7 +70,7 @@ function App() {
   useEffect(() => {
     async function loadDep() {
       await loadWeb3();
-      await loadBlockchainData(setAccount, setSocial, setPhotoCount, setModal, setLoading, setPhotos);
+      await loadBlockchainData(setAccount, setSocial, setModal, setLoading, setPhotos);
     }
     if (!web3) {
       loadDep();
