@@ -51,7 +51,6 @@ function Feed () {
                 setPhotos(photoMap);
             });
         });
-        console.log(app.selectedAccount)
     }, [])
 
     const uploadPhoto = (event) => {

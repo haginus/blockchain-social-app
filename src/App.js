@@ -8,6 +8,7 @@ import Feed from './components/Feed';
 import UserRegistrationForm from './components/UserRegistrationForm';
 import { appState } from './recoil/atoms';
 import { useRecoilState } from 'recoil';
+import { parseObject } from './util';
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
     initSocial().then(async (accounts) => {
       let currentUser;
       try {
-        currentUser = await social.methods.getCurrentUser().call();
+        currentUser = parseObject(await social.methods.getCurrentUser().call({ from: accounts[0] }));
       } catch(e) {
         currentUser = null;
       }

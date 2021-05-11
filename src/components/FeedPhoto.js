@@ -8,6 +8,7 @@ import { social } from '../Social';
 import './FeedPhoto.css';
 
 import Identicon from 'react-identicons';
+import { parseObject } from "../util";
 
 function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }) {
 
@@ -30,7 +31,7 @@ function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }
             } else {
                 let prm = social.methods.users(authorId - 1).call();
                 setUsers({ ...users, [authorId]: prm });
-                let userData = await prm;
+                let userData = parseObject(await prm);
                 setUsers({ ...users, [authorId]: userData });
                 setAuthor(userData);
             }
@@ -38,10 +39,8 @@ function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }
             if(app.currentUser.id === authorId) {
                 setCanFollow(false);
             } else {
-                // check if user has followed author (needs contract changes)
-                setCanFollow(true);
+                setCanFollow(await social.methods.isUserFollowing(app.selectedAccount, authorAddress).call() == false)
             }
-
             setHasLiked(await social.methods.photoLikedBy(id, app.selectedAccount).call());
         };
         getUser();
@@ -64,7 +63,7 @@ function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }
         social.methods.followUser(authorAddress).send({ from: app.selectedAccount })
         .on('transactionHash', (hash) => {
             setCanFollow(false);
-            let newApp = { ...app };
+            let newApp = parseObject(app);
             newApp.currentUser.followingCount = +newApp.currentUser.followingCount + 1;
             setApp(newApp);
             setAuthor({ ...author, followerCount: +author.followerCount + 1 });
@@ -100,7 +99,7 @@ function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }
                 <div className="photo-description-container">
                     <div className="like-count bold">{ likeCountS } likes</div>
                     <div>
-                        <span className="bold">haginus</span>
+                        <span className="bold">{ author.username }</span>
                         <span className="photo-description">{ description }</span>
                     </div>
                 </div>
