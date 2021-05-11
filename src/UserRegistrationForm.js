@@ -29,4 +29,4 @@ function UserRegistrationForm({social, account}) {
     );
   }
   
-  export default UserRegistrationForm;
+export default UserRegistrationForm;

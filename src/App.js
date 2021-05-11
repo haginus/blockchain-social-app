@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import Social from './abis/Social.json'
 import { useEffect, useState } from 'react';
 import UserRegistrationForm from './UserRegistrationForm';
+import Feed from './Feed';
 
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
@@ -21,7 +22,7 @@ const loadWeb3 = async () => {
   }
 };
 
-const loadBlockchainData = async (setAccount, setSocial, setPhotoCount, setModal) => {
+const loadBlockchainData = async (setAccount, setSocial, setPhotoCount, setModal, setLoading, setPhotos) => {
   const web3 = window.web3
   // Load account
   const accounts = await web3.eth.getAccounts();
@@ -32,15 +33,29 @@ const loadBlockchainData = async (setAccount, setSocial, setPhotoCount, setModal
   if(networkData) {
     const social = new web3.eth.Contract(Social.abi, networkData.address);
     setSocial(social);
-    console.log(social);
     try {
       const user = await social.methods.getCurrentUser().call();
     } catch(e) {
       setModal(true);
+      setLoading(false);
       return;
     }
+
+    const photoCount = await social.methods.photoCount().call();
+    console.log(photoCount);
+    const promises = [];
+    for (let i = 0; i < photoCount; i++) {
+      promises.push(social.methods.photos(i).call());
+    }
+    Promise.all(promises)
+      .then(photos => {
+        setPhotos(photos);
+        photos.forEach(photo => console.log(photo));
+        setLoading(false);
+      });
   } else {
-    window.alert('Social contract not deployed to detected network.')
+    window.alert('Social contract not deployed to detected network.');
+    setLoading(false);
   }
 }
 
@@ -51,12 +66,14 @@ function App() {
   const [social, setSocial] = useState(undefined);
   const [photoCount, setPhotoCount] = useState(undefined);
   const [account, setAccount] = useState(undefined);
-
+  const [loading, setLoading] = useState(true);
+  const [photos, setPhotos] = useState(undefined);
+ 
   const [web3] = useState(undefined);
   useEffect(() => {
     async function loadDep() {
       await loadWeb3();
-      await loadBlockchainData(setAccount, setSocial, setPhotoCount, setModal);
+      await loadBlockchainData(setAccount, setSocial, setPhotoCount, setModal, setLoading, setPhotos);
     }
     if (!web3) {
       loadDep();
@@ -66,22 +83,12 @@ function App() {
   return (
     <div className="App">
       {
-        modal ? <UserRegistrationForm social={social} account={account}/> : "nemodal"
+        loading ? "Loading..." : (modal ? <UserRegistrationForm social={social} account={account}/> : <Feed ipfs={ipfs}
+                                                                                                            social={social} 
+                                                                                                            account={account} 
+                                                                                                            photos={photos}
+                                                                                                            setLoading={setLoading}/>)
       }
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
     </div>
   );
 }
