@@ -9,6 +9,7 @@ import FeedPhoto from './FeedPhoto';
 import './Feed.css';
 import { useEffect, useState } from 'react';
 import LoadingScreen from './LoadingScreen';
+import Identicon from 'react-identicons';
 
 const ipfsClient = require('ipfs-http-client');
 const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
@@ -50,6 +51,7 @@ function Feed () {
                 setPhotos(photoMap);
             });
         });
+        console.log(app.selectedAccount)
     }, [])
 
     const uploadPhoto = (event) => {
@@ -80,6 +82,7 @@ function Feed () {
         <div className="Feed">
             <div className="photo-upload-container">
                 <div className="profile-picture">
+                    <Identicon string={app.selectedAccount } size={36}/>
                 </div>
                 <Form className="photo-upload-form" onSubmit={(e) => uploadPhoto(e)}>
                     <h3>Upload a photo</h3>
@@ -114,7 +117,7 @@ function Feed () {
                     const photo = photos[id];
                     return (
                         <FeedPhoto id={photo.id} authorId={photo.authorId} likeCount={photo.likeCount}
-                            hash={photo.hash} description={photo.description} key={id}
+                            hash={photo.hash} description={photo.description} authorAddress={photo.author} key={id}
                         />
                     )
                 })

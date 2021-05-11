@@ -7,6 +7,8 @@ import { social } from '../Social';
 
 import './FeedPhoto.css';
 
+import Identicon from 'react-identicons';
+
 function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }) {
 
     const [canFollow, setCanFollow] = useState(false);
@@ -76,7 +78,7 @@ function FeedPhoto({ id, hash, description, likeCount, authorId, authorAddress }
         <div className="feed-photo">
             <div className="photo-header">
                 <div className="profile-picture">
-
+                    <Identicon string={authorAddress} size={36}/>
                 </div>
                 <div className="username">
                     { author.username }
