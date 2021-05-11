@@ -14,3 +14,8 @@ export const socialState = atom({
     key: 'socialState',
     default: undefined,
 });
+
+export const usersCache = atom({
+    key: 'usersCache',
+    default: {}
+})
