@@ -92,7 +92,7 @@ function Feed () {
             .on('receipt', (receipt) => {
                 setUploadingPhotoResult('success');
                 setUploadingPhoto(false);
-                const photo = receipt.events['PhotoUploaded'].returnValues;
+                const photo = receipt.events['PhotoCreated'].returnValues;
                 const id = parseInt(photo.id); 
                 setPhotos({ ...photos, [id]: photo });
             })
