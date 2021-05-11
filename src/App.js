@@ -3,6 +3,7 @@ import './App.css';
 
 import { social, initSocial } from './Social';
 import { useEffect } from 'react';
+import LoadingScreen from './components/LoadingScreen';
 import Feed from './components/Feed';
 import UserRegistrationForm from './components/UserRegistrationForm';
 import { appState } from './recoil/atoms';
@@ -47,7 +48,7 @@ function App() {
   return (
     <div className="App">
       { app.isInitializing ? 
-        "Loading..." : 
+        <LoadingScreen/> : 
           (app.currentUser ? 'logged in' : <UserRegistrationForm/>) }
          
     </div>
