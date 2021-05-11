@@ -92,6 +92,10 @@ contract('Social', ([deployer, newUser1, newUser2]) => {
 
     });
 
+    it('cannot follow twice', async () => {
+      await social.followUser(newUser2, { from: newUser1 }).should.be.rejected;
+    });
+
     it('cannot follow himself', async () => {
       await social.followUser(newUser1, { from: newUser1 }).should.be.rejected;
     });

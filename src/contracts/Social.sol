@@ -24,6 +24,7 @@ contract Social {
 
     mapping(address => uint256[]) public userFollowing;
     mapping(address => uint256[]) public userFollowers;
+    mapping(address => mapping(address => bool)) public isUserFollowing;
 
     event UserCreated(uint256 id, string fullName, string username, string bio);
     event UserEdited(uint256 id, string fullName, string username, string bio);
@@ -90,6 +91,7 @@ contract Social {
 
     function followUser(address userAddress) public {
         require(msg.sender != userAddress, "User cannot follow himself.");
+        require(isUserFollowing[msg.sender][userAddress] == false, "Cannot follow twice.");
 
         uint256 uid_from = userAddressMap[msg.sender];
         require(uid_from > 0, "Follower user doesn't exist.");
@@ -102,6 +104,7 @@ contract Social {
 
         userFollowing[msg.sender].push(uid_to);
         userFollowers[userAddress].push(uid_from);
+        isUserFollowing[msg.sender][userAddress] = true;
 
         emit UserFollowed(userAddress, msg.sender);
     }
