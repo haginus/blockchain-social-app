@@ -9,24 +9,6 @@ import UserRegistrationForm from './components/UserRegistrationForm';
 import { appState } from './recoil/atoms';
 import { useRecoilState } from 'recoil';
 
-const ipfsClient = require('ipfs-http-client');
-const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
-
-
-    //setApp({ accounts, selectedAccount, isLoadingUser: false, currentUser, socialContract: {...social } });
-
-    // const photoCount = await social.methods.photoCount().call();
-    // const promises = [];
-    // for (let i = 0; i < photoCount; i++) {
-    //   promises.push(social.methods.photos(i).call());
-    // }
-    // Promise.all(promises)
-    //   .then(photos => {
-    //     setPhotos(photos);
-    //     photos.forEach(photo => console.log(photo));
-    //     setLoading(false);
-    //   });
-
 function App() {
 
   const [app, setApp] = useRecoilState(appState);
@@ -49,7 +31,7 @@ function App() {
     <div className="App">
       { app.isInitializing ? 
         <LoadingScreen/> : 
-          (app.currentUser ? 'logged in' : <UserRegistrationForm/>) }
+          (app.currentUser ? <Feed/> : <UserRegistrationForm/>) }
          
     </div>
   );

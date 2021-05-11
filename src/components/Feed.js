@@ -27,33 +27,6 @@ function Feed () {
             buffer = Buffer(reader.result);
         }
     }
-    /*
-
-    const likeImage = id => {
-        console.log(`user ${account} likes photo ${id}`);
-        setLoading(true);
-        social.methods.likePhoto(id).send({ from: account }).on('transactionHash', (hash) => {
-            console.log(hash);
-            setLoading(false);
-            window.location.reload();
-        }).catch(e => {
-            console.error(e);
-            setLoading(false);
-        })
-    }
-
-    const followUser = user => {
-        console.log(`user ${account} wants to follow ${user}`);
-        setLoading(true);
-        social.methods.followUser(user).send({ from: account }).on('transactionHash', (hash) => {
-            console.log(hash);
-            setLoading(false);
-            window.location.reload();
-        }).catch(e => {
-            console.error(e);
-            setLoading(false);
-        })
-    } */
 
     const app = useRecoilValue(appState);
 
@@ -137,7 +110,7 @@ function Feed () {
                 
             </div>
             {
-                Object.keys(photos).map(id => {
+                Object.keys(photos).reverse().map(id => {
                     const photo = photos[id];
                     return (
                         <FeedPhoto id={photo.id} authorId={photo.authorId} likeCount={photo.likeCount}
