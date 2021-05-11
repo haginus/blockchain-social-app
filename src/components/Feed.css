@@ -1,0 +1,31 @@
+.photo-upload-container {
+    display: flex;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 8px;
+    border: 1px solid #eeeeee;
+    padding: 16px;
+    margin-top: 16px;
+    position: relative;
+}
+
+.photo-upload-form {
+    margin-left: 16px;
+    flex: 1;
+}
+
+.photo-upload-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+#description {
+    width: 100%;
+}
+
+.alert-area {
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 16px;
+}

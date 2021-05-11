@@ -1,23 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
 
+
+import { social, initSocial } from './Social';
+import { useEffect } from 'react';
+import LoadingScreen from './components/LoadingScreen';
+import Feed from './components/Feed';
+import UserRegistrationForm from './components/UserRegistrationForm';
+import { appState } from './recoil/atoms';
+import { useRecoilState } from 'recoil';
+
 function App() {
+
+  const [app, setApp] = useRecoilState(appState);
+
+  /** Bootstraping the app */
+  useEffect(() => {
+    initSocial().then(async (accounts) => {
+      let currentUser;
+      try {
+        currentUser = await social.methods.getCurrentUser().call();
+      } catch(e) {
+        currentUser = null;
+      }
+      setApp({ accounts, selectedAccount: accounts[0], isInitializing: false, currentUser });
+    });
+  }, []);
+  
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      { app.isInitializing ? 
+        <LoadingScreen/> : 
+          (app.currentUser ? <Feed/> : <UserRegistrationForm/>) }
+         
     </div>
   );
 }

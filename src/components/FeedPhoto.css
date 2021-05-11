@@ -1,0 +1,53 @@
+.feed-photo {
+    max-width: 500px;
+    overflow: hidden;
+    margin: 0 auto;
+    border-radius: 8px;
+    border: 1px solid #eeeeee;
+    padding-bottom: 8px;
+    margin-top: 36px;
+}
+
+.image-container {
+    width: 100%;
+}
+
+img {
+    width: 100%;
+}
+
+.photo-header {
+    display: flex;
+    padding: 8px;
+    align-items: center;
+}
+
+.profile-picture {
+    width: 36px;
+    height: 36px;
+    overflow: hidden;
+}
+
+.username {
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+.follow-button {
+    margin: 8px;
+    color: #1e88e5;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.photo-actions {
+    padding: 4px 0px;
+}
+
+.photo-description {
+    margin-left: 4px;
+}
+
+.photo-description-container {
+    padding: 0 8px;
+}
