@@ -1,14 +1,15 @@
 require('babel-register');
 require('babel-polyfill');
 require('dotenv').config();
+
 const HDWalletProvider = require('truffle-hdwallet-provider-privkey');
 const privateKeys = process.env.PRIVATE_KEYS || ""
 
 module.exports = {
   networks: {
     development: {
-      host: "127.0.0.1",
-      port: 8545,
+      host: process.env.HOST || "127.0.0.1",
+      port: process.env.PORT || 8545,
       network_id: "*" // Match any network id
     },
     ropsten: {
