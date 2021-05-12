@@ -8,8 +8,8 @@ const privateKeys = process.env.PRIVATE_KEYS || ""
 module.exports = {
   networks: {
     development: {
-      host: process.env.HOST || "127.0.0.1",
-      port: process.env.PORT || 8545,
+      host: process.env.GANACHE_HOST || "127.0.0.1",
+      port: process.env.GANACHE_PORT || 8545,
       network_id: "*" // Match any network id
     },
     ropsten: {
